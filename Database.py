@@ -4,6 +4,16 @@ from pydantic import BaseModel
 from embedding import get_embedding
 from deepseek_api import call_deepseek_ai  # Gọi AI từ deepseek_api.py
 from ai_service import process_user_question  # Gọi hàm xử lý câu hỏi từ ai_service.py
+from fastapi.middleware.cors import CORSMiddleware
+
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["*"],  # Cho phép tất cả các nguồn truy cập (có thể đổi thành domain cụ thể)
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
+
 
 app = FastAPI()
 

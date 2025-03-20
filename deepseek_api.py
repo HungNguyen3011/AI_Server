@@ -7,7 +7,7 @@ load_dotenv("Key.env")
 DEEPSEEK_API_KEY = os.getenv("DEEPSEEK_API_KEY")
 
 if not DEEPSEEK_API_KEY:
-    raise ValueError("API Key không tìm thấy, kiểm tra Key.env!")
+    raise ValueError("API Key không tìm thấy, kiểm tra Key")
 
 # Hàm gọi API DeepSeek
 def call_deepseek_ai(question: str):

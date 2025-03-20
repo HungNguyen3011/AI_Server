@@ -6,6 +6,10 @@ from deepseek_api import call_deepseek_ai  # Gọi AI từ deepseek_api.py
 from ai_service import process_user_question  # Gọi hàm xử lý câu hỏi từ ai_service.py
 from fastapi.middleware.cors import CORSMiddleware
 
+# Khởi tạo ứng dụng FastAPI
+app = FastAPI()
+
+# Thêm CORS middleware để cho phép truy cập từ các domain khác (nếu cần)
 app.add_middleware(
     CORSMiddleware,
     allow_origins=["*"],  # Cho phép tất cả các nguồn truy cập (có thể đổi thành domain cụ thể)
@@ -13,9 +17,6 @@ app.add_middleware(
     allow_methods=["*"],
     allow_headers=["*"],
 )
-
-
-app = FastAPI()
 
 class Question(BaseModel):
     question: str
@@ -32,9 +33,15 @@ def embedding_endpoint(text: str):
     return {"embedding": get_embedding(text)}
 
 @app.post("/ask/")
-async def ask_question(data: Question):
+async def ask_question_endpoint(data: Question):
     try:
-        result = process_user_question(data.question)  # Xử lý câu hỏi
-        return result
+        question_embedding = get_embedding(data.question)
+        # Gọi AI để nhận phản hồi thực sự
+        ai_response = call_deepseek_ai(data.question)
+        return {
+            "question": data.question,
+            "response": ai_response,
+            "embedding": question_embedding
+        }
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))

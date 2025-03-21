@@ -28,20 +28,19 @@ chroma_client = chromadb.PersistentClient(path="chroma_db/")
 def read_root():
     return {"message": "API is running"}
 
-@app.get("/embedding/")
-def embedding_endpoint(text: str):
-    return {"embedding": get_embedding(text)}
-
 @app.post("/ask/")
 async def ask_question_endpoint(data: Question):
     try:
+        # Tạo embedding từ câu hỏi
         question_embedding = get_embedding(data.question)
-        # Gọi AI để nhận phản hồi thực sự
+        
+        # Gọi AI để lấy câu trả lời (chuyển sang hàm call_deepseek_ai nếu đã tích hợp)
         ai_response = call_deepseek_ai(data.question)
+        
         return {
             "question": data.question,
-            "response": ai_response,
-            "embedding": question_embedding
+            "embedding": question_embedding,
+            "response": ai_response
         }
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))

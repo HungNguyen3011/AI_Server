@@ -28,11 +28,16 @@ chroma_client = chromadb.PersistentClient(path="chroma_db/")
 def read_root():
     return {"message": "API is running"}
 
-@app.post("/ask")  # Bỏ redirect khi có dấu '/'
+@app.post("/ask/")
 async def ask_question_endpoint(data: Question):
     try:
         question_embedding = get_embedding(data.question)
+        # Gọi AI để nhận phản hồi thực sự
         ai_response = call_deepseek_ai(data.question)
-        return {"question": data.question, "response": ai_response, "embedding": question_embedding}
+        return {
+            "question": data.question,
+            "response": ai_response,
+            "embedding": question_embedding
+        }
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))

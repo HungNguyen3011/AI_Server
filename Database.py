@@ -28,7 +28,7 @@ chroma_client = chromadb.PersistentClient(path="chroma_db/")
 def read_root():
     return {"message": "API is running"}
 
-@app.post("/ask", include_in_schema=False)  # Bỏ redirect khi có dấu '/'
+@app.post("/ask")  # Bỏ redirect khi có dấu '/'
 async def ask_question_endpoint(data: Question):
     try:
         question_embedding = get_embedding(data.question)

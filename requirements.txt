@@ -4,3 +4,6 @@ requests
 chromadb
 sentence-transformers
 python-dotenv
+PyPDF2
+pandas
+python-docx
